@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		li{
+			width: 50px;
+			height: 25px;
+			float: left;
+			background: gray;
+			margin: 10px;
+			list-style: none;
+			color: white;
+			font: 14px/25px "微软雅黑";
+			text-align: center;
+		}
+	</style>
+	<body>
+		<ul>
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+			<li>7</li>
+			<li>8</li>
+		</ul>
+		
+		<div class="">
+			<audio src="mp3/1.mp3"></audio>
+			<audio src="mp3/2.mp3"></audio>
+			<audio src="mp3/3.mp3"></audio>
+			<audio src="mp3/4.mp3"></audio>
+			<audio src="mp3/5.mp3"></audio>
+			<audio src="mp3/6.mp3"></audio>
+			<audio src="mp3/7.mp3"></audio>
+			<audio src="mp3/8.mp3"></audio>
+		</div>
+		
+		<button>播放音乐</button>
+	</body>
+	<script src="js/jquery-3.2.1.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		
+		//创建一个空数组保存按键的数值
+		var arr = [];
+		
+		$(document).keydown(function(e){
+			
+			//将按键的数值转化为琴键的下标
+			var i = e.keyCode - 49
+			
+			//如果非钢琴按键，则不保存
+			if (i>=0 && i<8) {
+				arr.push(i)
+			}
+			
+			//将数组转化为字符串
+			var str = JSON.stringify(arr)
+			
+			//保存在本地
+			localStorage.setItem("qp",str)
+			
+			//琴键按下时播放声音
+			$("audio").get(i).load()
+			$("audio").get(i).play()
+		})
+		
+		
+		$("button").click(function(){
+			
+			//取出保存的数据
+			var j = localStorage.getItem("qp")
+			//转化为数组
+			var str = JSON.parse(j)
+			
+			//设定一个变量，作为数组的下标
+			var s = 0
+			var timer = setInterval(function(){
+				
+				//如果下标大于数组长度，结束定时器，结束当前函数
+				if (s>=str.length) {
+					clearInterval(timer)
+					return
+				}
+				
+				$("audio").get(str[s]).load()
+				$("audio").get(str[s]).play()
+				
+				//播放下一个音调
+				s++;
+			},500)
+			
+			
+		})
+	</script>
+</html>
